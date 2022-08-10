@@ -7,6 +7,7 @@ import * as pactum from 'pactum';
 import { AppModule } from 'src/app.module';
 import { AuthDto } from 'src/auth/dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { EditUserDto } from 'src/user/dto';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -118,10 +119,35 @@ describe('App e2e', () => {
 
   describe('User', () => {
     describe('Get me', () => {
-      it.todo('should get me');
+      it('should get current user', () => {
+        return pactum
+          .spec()
+          .get('/users/me')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .expectStatus(200);
+      });
     });
+
     describe('Edit user', () => {
-      it.todo('should edit user');
+      it('should edit user', () => {
+        const dto: EditUserDto = {
+          firstName: 'Vladimir',
+          email: 'vlad@codewithvlad.com',
+        };
+
+        return pactum
+          .spec()
+          .get('/users')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .withBody(dto)
+          .expectStatus(200)
+          .expectBodyContains(dto.firstName)
+          .expectBodyContains(dto.email);
+      });
     });
   });
 
@@ -129,17 +155,21 @@ describe('App e2e', () => {
     describe('Create bookmark', () => {
       it.todo('should create bookmark');
     });
+
     describe('Get bookmarks', () => {
       it.todo('should get bookmarks');
     });
+
     describe('Get bookmark by id', () => {
       it.todo('should get bookmark by id');
     });
-    describe('Edit bookmark', () => {
-      it.todo('should edit bookmark');
+
+    describe('Edit bookmark by id', () => {
+      it.todo('should edit bookmark by id');
     });
-    describe('Delete bookmark', () => {
-      it.todo('should delete bookmark');
+
+    describe('Delete bookmark by id', () => {
+      it.todo('should delete bookmark by id');
     });
   });
 });
