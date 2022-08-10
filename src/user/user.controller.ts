@@ -2,16 +2,21 @@ import { JwtGuard } from './../auth/guard/jwt.guard';
 import {
   Controller,
   Get,
-  Req,
   UseGuards,
 } from '@nestjs/common';
-import { Request } from 'express';
+import { GetUser } from 'src/auth/decorator';
+import { User } from '@prisma/client';
 
+@UseGuards(JwtGuard)
 @Controller('users')
 export class UserController {
-  @UseGuards(JwtGuard)
   @Get('me')
-  getMe(@Req() req: Request) {
-    return req.user;
+  getMe(
+    @GetUser() user: User,
+    @GetUser('email') email: string,
+  ) {
+    console.log({ email });
+
+    return user;
   }
 }
